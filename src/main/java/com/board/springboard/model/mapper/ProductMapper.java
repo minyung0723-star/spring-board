@@ -26,7 +26,7 @@ public interface ProductMapper {
     //제품 전체 목록 조회
     List<Product> 전체제품목록();
     //제품 단건 조회
-    Product 제품단건();
+    Product 제품단건(int id);
     //제품 추가
     void 제품추가(Product product);
 
