@@ -3,7 +3,13 @@ package com.board.springboard.model.service;
 import com.board.springboard.model.dto.User;
 import com.board.springboard.model.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.realm.UserDatabaseRealm;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -76,4 +82,64 @@ public class UserService {
     public User 이메일로유저찾기(String email) {
         return userMapper.이메일로유저찾기(email);
     }
+
+    /**
+     * 프로필 사진 업로드 및 DB 저장
+     *
+     * 처리 순서 :
+     * 1. 업로드된 파일이 비어있는지 확인
+     * 2. 저장 폴더가 없으면 자동 생성(서버 재시작 재부팅 시 안정하게 이미지를 가져올 수 있다.
+     * 3. 파일명 충돌 방지를 위해 UUID + 원본 확장자로 파일명 생성
+     * 4. 서버 디스크에 파일 저장
+     * 5. DB의 profile_img 컬럼에 웹 접근 경로 저장
+     * 6. 세션 갱신을 위해 수정된 최신 User 데이터 객채 반환
+     * @param loginUser 현재 로그인 되어있는 세션에서 꺼낸 현재 로그인 유저의 정보가 담겨있는 변수공간의 명칭
+     * @param imageFile <input type="file">로 전달된 MultipartFile
+     * @param uploadPath 파일을 저장할 서버 절대경로(application.properties 에서 설정하고, 설정된 키이름 경로 가져올것)
+     * @return 프로필 사진 경로가 반영된 최신 유저 정보를 다시 웹사이트로 반환
+     * @throws java.io.IOException 파일 저장에 실패할 경우를 대비
+     */
+    public User 프로필사진업로드(User loginUser, MultipartFile imageFile, String uploadPath) throws IOException {
+
+        // 1. 파일이 비어있으면 업로드 처리 없이 현재 유저 그대로 반환
+        if(imageFile == null || imageFile.isEmpty()) return  loginUser; //if() {} 중괄호 내부 코드가 1줄일 경우 {} 생략 가능
+
+        // 2. 프로필을 저장하는 경로에 폴더들이 존재하지 않을 경우
+        File 폴더 = new File(uploadPath);
+        if(!폴더.exists()) 폴더.mkdirs();
+        // !폴더 = 폴더가 존재하지 않는게 사실이라면 = true 라면
+        // .mkdirs() 전체경로에서 존재하지 않는 폴더들 모~두 생성
+        // .mkdir() 마지막에 해당하는 폴더만 생성 / 마지막까지 도달하는데 존재하지 않는 폴더가 있을 경우 에러가 발생하여
+        // 폴더 생성을 중단하기 때문에 보통 폴더를 생성할 때 .mkdirs()를 사용한다.
+
+        // 3. 파일명 : 충돌 방지 : UUID + 원본 확장자
+        //    원본파일명 : profile.jpg -> 저장파일명 : 랜덤문자와숫자들.jpg
+        String 원본파일이름 = imageFile.getOriginalFilename();
+        String 확장자       = 원본파일이름.substring(원본파일이름.lastIndexOf("."));
+        String 저장할파일   = UUID.randomUUID().toString() + 확장자;
+
+        // 4. 서버 디스크에 파일 저장
+        File 파일저장 = new File(uploadPath + "/" + 저장할파일);
+        imageFile.transferTo(파일저장);
+
+        // 5. DB 애 저장할 웹 접근 경로 설정
+        String 웹경로 = "/uploads/profile/" + 저장할파일;
+
+        // 6. DB 업데이트 : 해당 유저의 profile.img 컬럼에 웹 경로 저장
+        User db저장할유저정보 = new User();
+        db저장할유저정보.setId(loginUser.getId());
+        db저장할유저정보.setProfile_img(웹경로);
+        userMapper.프로필사진수정(db저장할유저정보);
+
+        return userMapper.유저단건조회(loginUser.getId());
+    }
+
+    public User 유저단건조회(int id) {
+        return userMapper.유저단건조회(id);
+    }
+
+    public void 유저정보수정(User user) {
+        userMapper.유저정보수정(user);
+    }
+
 }

@@ -4,17 +4,28 @@ import com.board.springboard.model.dto.User;
 import com.board.springboard.model.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+    /**
+     * file.upload.path = C:/프로필사진을 업로드할 경로
+     *
+     * 프로필 사진 업로드 경로를 키이름으로 가져와서 외부에 노출
+     */
+    @Value("${file.upload.path}")
+    private String uploadPath;
 
     /**
      * 회원가입 페이지 이동
@@ -119,4 +130,60 @@ public class UserController {
     //완성된 기능 {}내부에 기능이 작성되지 않더라도 {} 존재 자체만으로 완성된 기능
     접근제어자 반환타입 기능명칭(매개변수자리){기능자리}
      */
+
+
+    @GetMapping("/user/profile")
+    public String profileView(HttpSession 로그인유저정보, Model model){
+        // 로그인유저정보 에서 loginUser 라는 공간에 저장되어 있는 유저에 대한 정보를 가져오기 = getAttribute
+        로그인유저정보.getAttribute("loginUser");
+
+        // 가져온 유저 정보를 User 틀에 맞춰 특정 변수 공간에 임시 보관
+        User 임시보관된_유저정보 = (User)로그인유저정보.getAttribute("loginUser");
+
+        if (임시보관된_유저정보 == null) return "redirect:/user/login";
+
+        User 프로필수정된_최신유저정보데이터 = userService.유저단건조회(임시보관된_유저정보.getId());
+        model.addAttribute("user", 프로필수정된_최신유저정보데이터);
+
+        return "user/profile";
+    }
+
+    @PostMapping("/user/profile/upload")
+    public String 프로필사진업로드하기(@RequestParam("imageFile")MultipartFile imageFile,
+                             HttpSession session, RedirectAttributes redirectAttributes){
+        User 로그인된_유저정보 = (User) session.getAttribute("loginUser");
+
+        if(로그인된_유저정보 ==  null) return "redirect:/user/login";
+
+        try{
+            User updateUser = userService.프로필사진업로드(로그인된_유저정보, imageFile, uploadPath);
+
+            session.setAttribute("loginUser", updateUser);
+
+            redirectAttributes.addFlashAttribute("msg", "프로필 사진이 변경되었습니다");
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("errer", "사진 업로드에 실패했습니다.");
+        }
+
+        return "redirect:/user/profile";
+    }
+
+    @PostMapping("/user/profile/edit")
+    public String 유저정보수정(@ModelAttribute User user,
+                         HttpSession session,
+                         RedirectAttributes redirectAttributes) {
+
+        User 로그인유저 = (User) session.getAttribute("loginUser");
+        if (로그인유저 == null) return "redirect:/user/login";
+
+        user.setId(로그인유저.getId());
+
+        userService.유저정보수정(user);
+
+        User 최신유저 = userService.유저단건조회(로그인유저.getId());
+        session.setAttribute("loginUser", 최신유저);
+
+        redirectAttributes.addFlashAttribute("msg", "정보가 수정되었습니다.");
+        return "redirect:/user/profile";
+    }
 }

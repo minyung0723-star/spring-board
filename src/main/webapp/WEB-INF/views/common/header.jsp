@@ -69,7 +69,10 @@
             <%-- 로그인 후 --%>
             <c:if test="${not empty sessionScope.loginUser}">
                 <li class="nav-item">
-                    <span class="nav-link">${sessionScope.loginUser.name}님 환영해요!</span>
+
+                    <a class="nav-link" href="/user/profile">
+                            ${sessionScope.loginUser.name}님 환영해요!
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/user/logout">로그아웃</a>
