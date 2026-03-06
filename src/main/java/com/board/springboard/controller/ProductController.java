@@ -30,7 +30,7 @@ public class ProductController {
     public String 제품목록(Model model) {
         List<Product> productsData = productService.전체제품목록();
         model.addAttribute("products", productsData);
-        return "product/list";
+        return "product/product_list";
     }
 
     /**
