@@ -20,6 +20,7 @@ public class Board {
     private String writer;
     private LocalDateTime created_at;
     private int view_count;
+    private String attach_img;
     /*
     primary key 에 해당하는 컬럼은 Integer 나 Long 인 데이터 공간으로 설정
     이외는 String float int ... 개발자가 만든 자료형 형태로   공간    설정

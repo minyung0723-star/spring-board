@@ -1,0 +1,8 @@
+db:
+  url: jdbc:mysql://localhost:3306/mydb
+  username: root
+  password: tjee1234
+
+file:
+  upload:
+    profile-path: C:/uploads/profile
