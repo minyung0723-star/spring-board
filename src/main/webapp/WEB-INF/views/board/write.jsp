@@ -12,7 +12,7 @@
     <div class="card p-4 shadow-sm">
         <h2 class="mb-4">새 게시물 작성</h2>
 
-        <form action="/board/write" method="post">
+        <form action="/board/write" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">제목</label>
                 <input type="text" name="title" class="form-control" placeholder="제목을 입력하세요" required>
@@ -25,8 +25,10 @@
 
             <div class="mb-3">
                 <label class="form-label">내용</label>
-                <textarea name="content" class="form-control" rows="???" required></textarea>
+                <textarea name="content" class="form-control" rows="10" required></textarea>
             </div>
+            <input type="file" name="imageFile" accept="image/*" onchange="미리보기기능(this)">
+            <img id="미리보기" src="" style="display:none;">
 
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-dark px-4">저장하기</button>
@@ -71,6 +73,18 @@
         </form>
     </div>
 </div>
-
+<script>
+    function 미리보기기능(input) {
+        const preview = document.getElementById("미리보기");
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 </body>
 </html>

@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -49,8 +50,10 @@ public class ViewController {
         this.boardService = boardService; -> 클래스 필드에 직접 대입해서 사용하겠다.
     }
      */
+
     /**
      * 메인 페이지로 이동
+     *
      * @return index.jsp
      */
     @GetMapping("/")
@@ -62,11 +65,13 @@ public class ViewController {
         ${board.title}
     </a>
      */
+
     /**
      * 게시물 상세 조회 페이지 이동
+     *
      * @param board_no 조회할 게시물 번호
      * @param model    단일 게시물 데이터를 jsp로 전달하기 위한 객체
-     * @return          board/detail.jsp
+     * @return board/detail.jsp
      */
     @GetMapping("/board/detail")
     public String detailView(@RequestParam("no") int board_no, Model model) {
@@ -76,10 +81,12 @@ public class ViewController {
         model.addAttribute("board", boardData);
         return "board/detail";
     }
+
     /**
      * 게시물 목록 조회 및 페이지 이동
+     *
      * @param model 게시물 리스트 데이터를 전달하기 위한 객체
-     * @return      board/product_list.jsp
+     * @return board/product_list.jsp
      */
 
     @GetMapping("/board/list")
@@ -93,30 +100,37 @@ public class ViewController {
          */
         return "board/list";
     }
+
     /**
      * 게시물 작성 페이지 이동
+     *
      * @return board/write.jsp
      */
     @GetMapping("/board/write")
     public String writeView() {
         return "board/write";
     }
+
     /**
      * 게시물 작성 처리 (DB저장)
+     *
      * @param board 작성된 데이터가 담긴 DTO
-     * @return      게시물 목록으로 리다이렉트
+     * @return 게시물 목록으로 리다이렉트
      */
 
     @PostMapping("/board/write")
-    public String wrtieBoard(Board board) {
-        boardService.writeBoard(board);
+    public String wrtieBoard(Board board, @RequestParam(required = false,
+            value = "imageFile") MultipartFile imageFile) throws Exception {
+        boardService.writeBoard(board, imageFile);
         return "redirect:/board/list";
     }
+
     /**
      * 게시물 수정 이동 (기존 데이터 조회 포함)
+     *
      * @param board_no 수정해야하는 게시물 번호
      * @param model    기존 데이터를 전달하기 위한 객체
-     * @return         board 폴더 안에 존재하는 edit 파일로 이동
+     * @return board 폴더 안에 존재하는 edit 파일로 이동
      */
     @GetMapping("/board/edit")
     public String editView(@RequestParam("no") int board_no, Model model) {
@@ -127,9 +141,10 @@ public class ViewController {
 
     /**
      * 게시물 삭제 처리
+     *
      * @param board_no : JSP 에서 'no' 라는 이름으로 보낸 게시물 번호
      * @return : 삭제 후 게시물 목록 페이지로 이동
-     *
+     * <p>
      * redirect : 서버가 웹 사이트에게 다른 주소로 다시 가라고 명령하는 것,
      * 사용자가 보낸 요청을 서버가 처리하고 나서, 현재 페이지에 머무는 것이 아니라
      * 새로운 페이지를 처음부터 다시 호출하게 만들 때 사용
