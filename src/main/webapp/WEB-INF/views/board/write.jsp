@@ -27,10 +27,15 @@
                 <label class="form-label">내용</label>
                 <textarea name="content" class="form-control" rows="10" required></textarea>
             </div>
-            <input type="file" name="imageFiles" accept="image/*" multiple onchange="미리보기기능(this)">
-            <div id="이미지개수"></div>
-           <!-- <img id="미리보기" src="" style="display:none;"> -->
-            <div id="미리보기"></div>
+            <div class="mb-3">
+                <label class="form-label">
+                    이미지 첨부 <span class="text-muted">(최대 5장)</span>
+                </label>
+                <input type="file" name="imageFiles" accept="image/*" multiple
+                       class="form-control" onchange="미리보기기능(this)">
+                <div id="이미지개수" class="small text-muted mt-1"></div>
+            </div>
+            <div id="미리보기" class="d-flex flex-wrap gap-2 mt-2"></div>
 
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-dark px-4">저장하기</button>
@@ -104,6 +109,9 @@
             reader.onload = function (e) {
                 const 이미지 = document.createElement("img");
                 이미지.src = e.target.result;
+                이미지.className = "rounded border object-fit-cover";
+                이미지.style.width ="120px";
+                이미지.style.height ="120px";
                 미리보기영역.appendChild(이미지);
             };
             reader.readAsDataURL(파일하나);
