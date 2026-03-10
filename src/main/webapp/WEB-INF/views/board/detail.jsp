@@ -44,7 +44,7 @@
             --%>
 
             <button type="button" class="btn btn-danger"
-                    onclick="게시물삭제기능${board.board_no}">삭제
+                    onclick="게시물삭제기능(${board.board_no})">삭제
             </button>
         </div>
     </div>
