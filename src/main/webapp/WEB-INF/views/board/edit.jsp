@@ -26,12 +26,36 @@
 
         <div class="text-end">
             <a href="/board/detail?no=${board.board_no}" class="btn btn-outline-secondary">취소</a>
-            <button class="btn btn-warning">수정완료</button>
+            <button type="button" class="btn btn-warning" onclick="수정완료버튼기능()">수정완료</button>
         </div>
 
     </form>
 
 </div>
+<script>
+    /*
+    기능작성시작 기능의멍칭(매개변수자리){기능세부작동내용}
+    function     수정완료버튼기능()     {}
+     */
+    function 수정완료버튼기능(){
+        const 벡엔드로_전달할_데이터들 = {
+            /* json 형식처럼 키이름 : 키에 들어갈 데이터  */
+            board_no : document.getElementById("board_no").value,
+            title : document.getElementById("title").value,
+            content : document.getElementById("content").value
+        };
 
+        //데이터 준비되었으면 백엔드로 전송하는 작업 진행
+        fetch("/board/edit", {
+            method: 'PUT',
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify(벡엔드로_전달할_데이터들)
+        })
+            .then(res => res.json())
+            .then(결과 =>{
+                location.href="/board/detail?no="+결과
+            })
+    }
+</script>
 </body>
 </html>
