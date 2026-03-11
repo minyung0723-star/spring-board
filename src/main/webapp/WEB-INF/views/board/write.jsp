@@ -5,10 +5,25 @@
     <meta charset="UTF-8">
     <title>게시물 작성</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .미리보기이미지{
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 0.375rem;
+            border: 1px solid #dee2e6;
+        }
+        .이미지개수-오류{
+            color: red;
+        }
+        .이미지개수-정상{
+            color: #888;
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body class="bg-light"> <!-- 문서 몸통을 전반적으로 배경색 밝은 효과 -->
 
-<div class="container mt-5" style="max-width: 600px;">
+<div class="container mt-5" style="max-width: 600px;"> <!-- 여기서부터 페이지 전체 꾸미기 시작 아래와 여백을 5 정도 주겠다. -->
     <div class="card p-4 shadow-sm">
         <h2 class="mb-4">새 게시물 작성</h2>
 
@@ -93,14 +108,14 @@
         // 5장 초과시 경고 후 선택 초기화
         if(파일들.length > 5){
             이미지개수.textContent = "최대 5장 까지만 업로드 가능합니다.";
-            이미지개수.style.color = "red";
+            이미지개수.className = "이미지개수-오류";
 
             input.value="";
             return; // input 내에서 선택된 파일들을 모두 제거한다.
         }
 
         이미지개수.textContent = "선택된 이미지 :" + 파일들.length + "장";
-        이미지개수.style.color = "#888";// 0에 가깝기 때문에 검정에 가까운 회색
+        이미지개수.className = "이미지개수-정상";// 0에 가깝기 때문에 검정에 가까운 회색
 
 
 //        if (input.files && input.files[0]) {
@@ -110,8 +125,7 @@
                 const 이미지 = document.createElement("img");
                 이미지.src = e.target.result;
                 이미지.className = "rounded border object-fit-cover";
-                이미지.style.width ="120px";
-                이미지.style.height ="120px";
+                이미지.className = "미리보기이미지";
                 미리보기영역.appendChild(이미지);
             };
             reader.readAsDataURL(파일하나);

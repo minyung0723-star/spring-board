@@ -15,7 +15,7 @@
         <h2 class="fw-bold">${board.title}</h2>
 
         <div class="text-muted mb-4">
-            작성자: ${board.writer} | 작성일: ${created_at} | 조회수: ${board.view_count}
+            작성자: ${board.writer} | 작성일: ${board.created_at} | 조회수: ${board.view_count}
         </div>
 
         <hr>
@@ -23,8 +23,10 @@
         <div class="py-3" style="min-height: 200px; white-space: pre-wrap;">
             ${board.content}
         </div>
-        <c:if test="${not empty board.attach_img}">
-            <img src="${board.attach_img}">
+        <c:if test="${not empty images}">
+            <c:forEach var="이미지한장씩" items="${images}">
+                <img src="${이미지한장씩.img_path}" class="img-fluid">
+            </c:forEach>
         </c:if>
         <hr>
 
