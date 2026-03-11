@@ -59,14 +59,25 @@ public class ProductController {
         return "product/editForm";
     }
 
-    @PostMapping("/edit")
-    public String 제품수정처리(@ModelAttribute Product product,
+    @PutMapping("/edit")
+    @ResponseBody
+    public Product 제품수정처리(@ModelAttribute Product product,
                          RedirectAttributes redirectAttributes) {
         productService.제품수정(product);
         redirectAttributes.addFlashAttribute("msg", "제품이 수정되었습니다.");
-        return "redirect:/product/list";
+        return product;
     }
 
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public String 제품삭제처리(@RequestParam int id,
+                         RedirectAttributes redirectAttributes) {
+        productService.제품삭제(id);
+        redirectAttributes.addFlashAttribute("msg", "제품이 삭제되었습니다.");
+        // 제품 리스트로 돌아가서 제품이 삭제되었다는 메세지를 잠깐 보기위해 redirectAttributes 로 가져온다.
+        return "ok";
+    }
+/*
     @GetMapping("/delete")
     public String 제품삭제처리(@RequestParam int id,
                          RedirectAttributes redirectAttributes) {
@@ -75,4 +86,6 @@ public class ProductController {
         // 제품 리스트로 돌아가서 제품이 삭제되었다는 메세지를 잠깐 보기위해 redirectAttributes 로 가져온다.
         return "redirect:/product/list";
     }
+
+ */
 }
