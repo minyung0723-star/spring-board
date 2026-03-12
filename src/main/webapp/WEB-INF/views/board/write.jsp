@@ -96,38 +96,6 @@
     </div>
 </div>
 <script>
-    function 저장하기기능() {
-        const 제목    = document.querySelector("input[name='title']");
-        const 작성자  = document.querySelector("input[name='writer']");
-        const 내용    = document.querySelector("textarea[name='content']");
-
-        // ① 제목이 비어있으면 경고 후 포커스, 함수 종료
-        if(제목.value.trim() === ""){
-            alert("제목을 입력해주세요.");
-            제목.focus();
-            return;
-        }
-
-        // ② 작성자가 비어있으면 경고 후 포커스, 함수 종료
-        if(작성자.value.trim() === ""){
-            alert("작성자를 입력해주세요.");
-            작성자.focus();
-            return;
-        }
-
-        // ③ 내용이 비어있으면 경고 후 포커스, 함수 종료
-        if(내용.value.trim() === ""){
-            alert("내용을 입력해주세요.");
-            내용.focus();
-            return;
-        }
-
-        // ④ 검증 통과 시 form 제출
-        document.querySelector("form").submit();
-         // querySelect 안에는 태그이름, 이름속성, 아이디속성, 클래스속성
-         // 모든 것을 작성할 수 있다.             .아이디이름  #클래스이름
-    }
-
     function 미리보기기능(input) {
         const 미리보기영역 = document.getElementById("미리보기");
         const 이미지개수 = document.getElementById("이미지개수");
@@ -163,6 +131,52 @@
             reader.readAsDataURL(파일하나);
         });
     }
+
+    function 저장하기기능() {
+        const 제목    = document.querySelector("input[name='title']");
+        const 작성자  = document.querySelector("input[name='writer']");
+        const 내용    = document.querySelector("textarea[name='content']");
+
+        // ① 제목이 비어있으면 경고 후 포커스, 함수 종료
+        if(제목.value.trim() === ""){
+            alert("제목을 입력해주세요.");
+            제목.focus();
+            return;
+        }
+
+        // ② 작성자가 비어있으면 경고 후 포커스, 함수 종료
+        if(작성자.value.trim() === ""){
+            alert("작성자를 입력해주세요.");
+            작성자.focus();
+            return;
+        }
+
+        // ③ 내용이 비어있으면 경고 후 포커스, 함수 종료
+        if(내용.value.trim() === ""){
+            alert("내용을 입력해주세요.");
+            내용.focus();
+            return;
+        }
+
+        // ④ 검증 통과 시 form 제출
+        //document.querySelector("form").submit();
+         // querySelect 안에는 태그이름, 이름속성, 아이디속성, 클래스속성
+         // 모든 것을 작성할 수 있다.             .아이디이름  #클래스이름
+
+        const formData = new FormData(document.querySelector("form")); //파일 전송을 도와주는 javaScript 객체
+
+        fetch("board/write",{
+            method: "post",
+            body: formData
+        })
+            .then((res) => res.json())
+            .then(결과 => {
+                location.href = "/board/list";
+            })
+            .catch(err => console.log(err));
+
+    }
+
 </script>
 </body>
 </html>
