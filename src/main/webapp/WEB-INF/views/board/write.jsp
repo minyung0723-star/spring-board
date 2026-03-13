@@ -131,7 +131,7 @@
             reader.readAsDataURL(파일하나);
         });
     }
-
+/*
     function 저장하기기능() {
         const 제목    = document.querySelector("input[name='title']");
         const 작성자  = document.querySelector("input[name='writer']");
@@ -176,6 +176,8 @@
             .catch(err => console.log(err));
 
     }
+
+ */
 
 </script>
 </body>
