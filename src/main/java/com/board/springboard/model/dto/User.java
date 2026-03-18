@@ -22,6 +22,7 @@ public class User {
     private Integer id;
     private String name;
     private String email;
+    private String password;
     private LocalDateTime create_at;
     private String profile_img; //프로필 사진 파일 경로 -> profileImg
 
