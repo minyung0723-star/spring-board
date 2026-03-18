@@ -34,6 +34,12 @@ public interface UserMapper {
     // class 타입의 자료형 또한 반환타입에 들어갈 수 있다.
     // 외부 class 에서 기능을 사용만 하고, 기능에 대한 결과를 반환할 필요가 없을 경우
     // void(=return 할 데이터가 존재하지 않음)로 표기 가능
+
+    /**
+     *
+     * @param email -> 비밀번호는 Service 에서 BCrypt 검증
+     * @return
+     */
     User 로그인(String email);
 
 

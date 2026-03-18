@@ -70,6 +70,89 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    function 파일을Base64로읽기(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload  = (e) => ____;
+            reader.onerror = () => ____;
+            reader.readAsDataURL(____);
+        });
+    }
+
+    async function 미리보기기능(input) {
+        const preview = document.getElementById("____");
+        const noImg   = document.getElementById("____");
+
+        if (!____ || !____[0]) return;
+
+        try {
+            const dataUrl = await 파일을Base64로읽기(____);
+            preview.src = ____;
+            preview.style.display = "____";
+            if (noImg) noImg.style.display = "____";
+
+        } catch (err) {
+            console.error("미리보기 실패:", err);
+            alert("____");
+        }
+    }
+
+    async function 프로필사진업로드() {
+        const 메시지창 = document.getElementById("____");
+
+        try {
+            const formData = new FormData(document.getElementById("____"));
+
+            const 응답 = await fetch("____", {
+                method: "____",
+                body: ____
+            });
+
+            if (!응답.ok) throw new Error(`서버 오류: ${응답.status}`);
+
+            const div = document.createElement("____");
+            div.className = "____";
+            div.innerText = "____";
+            메시지창.innerHTML = "";
+            메시지창.appendChild(____);
+
+        } catch (err) {
+            const div = document.createElement("____");
+            div.className = "____";
+            div.innerText = "____";
+            메시지창.innerHTML = "";
+            메시지창.appendChild(____);
+        }
+    }
+
+    async function 프로필정보수정() {
+        const 메시지창 = document.getElementById("____");
+        const data = Object.fromEntries(new FormData(document.getElementById("____")).entries());
+
+        try {
+            const 응답 = await fetch("____", {
+                method: "____",
+                headers: { "Content-Type": "____" },
+                body: JSON.stringify(____)
+            });
+
+            if (!응답.ok) throw new Error(`서버 오류: ${응답.status}`);
+
+            const div = document.createElement("____");
+            div.className = "____";
+            div.innerText = "____";
+            메시지창.innerHTML = "";
+            메시지창.appendChild(____);
+
+        } catch (err) {
+            const div = document.createElement("____");
+            div.className = "____";
+            div.innerText = "____";
+            메시지창.innerHTML = "";
+            메시지창.appendChild(____);
+        }
+    }
 </script>
 
 <%@ include file="../common/footer.jsp" %>

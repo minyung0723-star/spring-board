@@ -9,8 +9,8 @@
         FROM users
     </select>
     <insert id="회원가입" parameterType="com.board.springboard.model.dto.User">
-        INSERT INTO users(name, email, create_at)
-        VALUES           (#{name}, #{email}, NOW())
+        INSERT INTO users(name, email, create_at, password)
+        VALUES           (#{name}, #{email}, NOW(), #{password})
     </insert>
     <select id="이메일중복체크" parameterType="String" resultType="int">
         SELECT COUNT(*)
@@ -31,6 +31,11 @@
         WHERE email = #{email}
     </select>
 
+    <!--
+    profile_img = #{profile_img}를 #{profileImg} 로 교체해서 사용해보기
+    자바에서 선언한 필드이름과 SQL에 작성한 컬럼명칭을
+    카멜케이스와 스네이크케이스로 맞추어 사용할 수 있다.
+    -->
     <update id="프로필사진수정" parameterType="com.board.springboard.model.dto.User">
         UPDATE users
         SET profile_img = #{profile_img}

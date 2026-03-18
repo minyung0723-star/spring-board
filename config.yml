@@ -7,3 +7,11 @@ file:
   upload:
     profile-path: C:/uploads/profile
     board-path: C:/uploads/board
+
+mail:
+  username: your-email@gmail.com  # email
+  password: your-app-password     # password app password 16자리로 이루어짐 2차 비밀번호 인증 통해 발급
+
+jwt:
+  config:
+    secret: springboard-jwt-secret-key-2026-change-this-please!!

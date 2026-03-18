@@ -23,5 +23,7 @@ public class User {
     private String name;
     private String email;
     private LocalDateTime create_at;
-    private String profile_img; //프로필 사진 파일 경로
+    private String profile_img; //프로필 사진 파일 경로 -> profileImg
+
+
 }
