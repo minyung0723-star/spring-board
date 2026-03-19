@@ -40,7 +40,7 @@ public class UserApiController {
         return ResponseEntity.ok(Map.of("message", "인증번호가 발송되었습니다."));
     }
 
-    @PostMapping("/user/check-email")
+    @PostMapping("/user/verify-code")
     public ResponseEntity<?> 인증번호확인(@RequestBody Map<String, String> body) {
         boolean 성공 = userService.인증번호검증(body.get("email"), body.get("code"));
         if (!성공) return ResponseEntity.badRequest().body(Map.of("message", "인증번호가 올바르지 않습니다."));
