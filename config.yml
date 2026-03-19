@@ -9,8 +9,8 @@ file:
     board-path: C:/uploads/board
 
 mail:
-  username: your-email@gmail.com  # email
-  password: your-app-password     # password app password 16자리로 이루어짐 2차 비밀번호 인증 통해 발급
+  username: minyung0723@gmail.com  # email
+  password: qifa rzwt cmtz rfoj     # password app password 16자리로 이루어짐 2차 비밀번호 인증 통해 발급
 
 jwt:
   config:
