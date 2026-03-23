@@ -3,10 +3,9 @@ db:
   username: root
   password: tjee1234
 
-file:
-  upload:
-    profile-path: C:/uploads/profile
-    board-path: C:/uploads/board
+upload:
+  profile-path: C:/uploads/profile
+  board-path: C:/uploads/board
 
 mail:
   username: minyung0723@gmail.com  # email

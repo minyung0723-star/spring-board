@@ -21,7 +21,7 @@ spring:
       max-request-size: 10MB
   mail:
     host: smtp.gmail.com
-    password: ${mail.password} # config.yml 에서 비밀번호를 전달
+    password: ${mail.password}
     username: ${mail.username}
     properties:
       mail:
@@ -29,7 +29,7 @@ spring:
           auth: true
           starttls:
             enable: true
-
+    port: 587 # 메일보낼 때 처음부터 암호화 처리를 해서 보내는게 아니라 정말로 메일이 가고 있을 때 암호화 처리를 진행
 mybatis:
   mapper-locations: classpath:mappers/**/*.xml
   configuration:
@@ -40,13 +40,11 @@ mybatis:
     # java 에서는 camelCase 케이스를 이용해서 단어 구분을 할 수 있게 설정
     # sql 대소문자 구분 없음 _를 이용해서 주로 단어 구분
     # java 에서는 카멜케이스를 많이 사용
-
 file:
   upload:
-    path: ${file.upload.profile-path}
-    board-path: ${file.upload.board-path}
-
+    path: ${upload.profile-path}
+    board-path: ${upload.board-path}
 jwt:
   secret: ${jwt.config.secret}
-  access-expiry: 1800000      # 30분 (ms)
-  refresh-expriry: 1209600000 # 14일 (ms)
+  access-expiry: 1800000
+  refresh-expiry: 1209600000

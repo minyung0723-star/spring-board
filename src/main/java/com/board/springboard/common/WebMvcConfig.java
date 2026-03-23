@@ -14,27 +14,23 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${file.upload.board-path}")
     private String boardUploadPath;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
         /**
          * 유저 프로필 사진 매핑
-         * 웹 URL : /uploads/profile/**
-         * 실제 경로 : C:/upload/profile
+         * 웹   URL : /uploads/profile/**
+         * 실제경로 : C:/upload/profile/
          */
         registry.addResourceHandler("/uploads/profile/**")
                 .addResourceLocations("file:///" + uploadPath + "/");
-
-        //DB에서 웹으로 전달할 경로와
-        // 실제 회사컴퓨터 or 개발자컴퓨터에서 가져올 데이터 경로
-
         /**
          * 게시물 첨부 이미지 매핑
-         * 웹 URL : /board/**
+         * 웹   URL : /board/**
          * 실제경로 : C:/uploads/board/
          * 클라이언트에게 보이는 경로와 실제 회사에 저장된 파일의 경로를 다르게 보여줄 수 있다.
-          */
-        registry.addResourceHandler("board/**")
+         */
+        registry.addResourceHandler("/board/**")
                 .addResourceLocations("file:///" + boardUploadPath + "/");
     }
 }

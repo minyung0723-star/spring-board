@@ -19,21 +19,13 @@
 
         <div class="mb-3">
             <label class="form-label">이름</label>
-            <input type="text"
-                   id="name"
-                   name="name"
-                   class="form-control"
-                   placeholder="이름을 입력하세요">
+            <input type="text" id="name" name="name" class="form-control" placeholder="이름을 입력하세요">
         </div>
 
         <div class="mb-3">
             <label class="form-label">이메일</label>
             <div class="input-group">
-                <input type="email"
-                       id="email"
-                       name="email"
-                       class="form-control"
-                       placeholder="이메일을 입력하세요">
+                <input type="email" id="email" name="email" class="form-control" placeholder="이메일을 입력하세요">
                 <button class="btn btn-outline-dark" type="button" onclick="인증번호발송()">
                     인증번호 발송
                 </button>
@@ -43,24 +35,14 @@
         <div class="mb-3" id="인증번호영역" style="display: none;">
             <label class="form-label">인증번호</label>
             <div class="input-group">
-                <input type="text"
-                       id="code"
-                       class="form-control"
-                       placeholder="6자리 숫자를 입력하세요.">
-                <button class="btn btn-outline-success"
-                        type="button"
-                        onclick="인증번호확인()">
-                    확인
-                </button>
+                <input type="text" id="code" class="form-control" placeholder="6자리 숫자를 입력하세요.">
+                <button class="btn btn-outline-success" type="button" onclick="인증번호확인()"> 확인 </button>
             </div>
             <div id="인증결과" class="mt-1 small"></div>
         </div>
         <div class="mb-3">
             <label class="form-label">비밀번호</label>
-            <input type="password"
-                   id="password"
-                   class="form-control"
-                   placeholder="비밀번호를 입력하세요.">
+            <input type="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요.">
         </div>
 
         <!--
@@ -79,11 +61,94 @@
         <div class="text-center mt-3">
             <a href="/user/login" class="text-muted">이미 계정이 있으신가요? 로그인</a>
         </div>
-
     </div>
 </div>
 <script>
+    // const = 내부 데이터 변동 불가 let = 내부 데이터 변동 가능 변수
+
     let 이메일인증완료 = false;
+    function showAlert(type, message) {
+        const 알림창 = document.getElementById("알림창");
+        알림창.className = `alert alert-${type}`;
+        알림창.innerText = message;
+        알림창.classList.remove('d-none');
+    }
+
+    async function 인증번호발송() {
+        const email = document.getElementById("email").value.trim();
+        if (!email) {
+            alert("이메일을 입력하세요.");
+            return;
+        }
+
+        const res = await fetch("/user/send-code", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email}),
+        })
+        if (res.ok) {
+            document.getElementById("인증번호영역").style.display = "block";
+            showAlert("info", "인증번호가 발송되었습니다.(5분 유효");
+        } else {
+            showAlert("danger", "발송에 실패했습니다.");
+        }
+    }
+
+
+    async function 인증번호확인() {
+        const email = document.getElementById("email").value.trim();
+        const code = document.getElementById("code").value.trim();
+        const 결과 = document.getElementById("인증결과");
+
+        const res = await fetch("/user/verify-code", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email, code})
+        });
+        if (res.ok) {
+            이메일인증완료 = true;
+            결과.innerHTML = '<span class="text-success fw-bold">인증 완료</span>';
+            document.getElementById("code").disabled = true;
+        } else {
+            결과.innerHTML = '<span class="text-danger">인증번호가 올바르지 않습니다.</span>';
+        }
+    }
+
+    async function 가입하기() {
+        if (!이메일인증완료) {                                                 // TODO 8 : 인증 미완료 조건 작성
+            alert("이메일 인증을 먼저 완료해주세요.");
+            return;
+        }
+
+        const name = document.getElementById("name").value.trim();  // TODO 9  : id 값 작성
+        const email = document.getElementById("email").value.trim();  // TODO 10 : id 값 작성
+        const password = document.getElementById("password").value.trim();  // TODO 11 : id 값 작성
+
+        if (!name || !email || !password) {
+            alert("모든 항목을 입력하세요.");
+            return;
+        }
+
+        const res = await fetch("/user/register", {                               // TODO 12 : 요청 주소 작성
+            method: "POST",                                             // TODO 13 : 전송 방식 작성
+            headers: {"Content-Type": "application/json"},                                   // TODO 14 : 헤더 작성
+            body: JSON.stringify({name, email, password})                  // TODO 15 : 전송할 데이터 작성 (힌트: 이름, 이메일, 비밀번호)
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+            window.location.href = "/user/login?success=true";                              // TODO 16 : 성공 시 이동할 주소 작성
+            // 힌트 : 로그인 페이지 + 성공 파라미터
+        } else {
+            showAlert("danger", data.message);                            // TODO 17 : 실패 타입 작성
+        }
+    }
+
+    function showAlert(type, msg) {
+        const el = document.getElementById("알림창");                     // TODO 18 : id 값 작성
+        el.className = "alert alert-" + type;
+        el.textContent = msg;
+    }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

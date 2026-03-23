@@ -31,6 +31,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain 보안설정(HttpSecurity http) throws Exception {
         http
+
                 // CSRF = 보호 기능 끄기
                 // CSRF = 다른 사이트에서 몰래 요청 보내는 공격
                 // Spring Security 팀에는 CSRF 기본 세팅 -> JWT 방식은 쿠키 세션을 안쓰기 때문에 CSRF 자체가 의미 없으므로 끔
@@ -41,8 +42,10 @@ public class SecurityConfig {
                         // 페스티벌에서 스태프들이 우리를 모두 외우지 않고
                         // JWT 방식 : 서버가 아무것도 기억 안 함, 토큰으로만 판단
                         // 입장 팔찌 기준으로 페스티벌에 접근 가능한 사람인지 판단하겠다.
+
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers( // 아래 주소는 로그인 토큰 없이 누구나 접근 가능한 경로
                                 "/",
                                 "/user/login",
@@ -51,13 +54,19 @@ public class SecurityConfig {
                                 "/user/send-code",
                                 "/user/verify-code",
                                 "/user/token/refresh",
+                                "/user/profile-info",
+                                "/board/**",
+                                "/product/**",
                                 "/css/**", "/js/**", "/images/**", "/uploads/**"
                         ).permitAll()
+
+
                         .anyRequest().authenticated() // 이외 나머지 주소는 로그인을 한 후 접근할 수 있다.
                 )
                 // Controller 에서 클라이언트의 접근이 들어오면
                 // 무조건 로그인을 해야하는 경우에는 로그인 검증 필터를 최 우선으로 실행시키겠다 환경설정
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
         // 위에서 작성한 설정 내용을 최종적으로 완성한 모습을 반환하겠다.
         return http.build();
     }

@@ -50,7 +50,7 @@
 <script>
     // == type 이 같은지는 확인하지 않고, 내부 데이터가 같은가?   === type 까지 확인해서 데이터 같은가?
     const params = new URLSearchParams(window.location.search);
-    if (params.get('success') === "join") {
+    if (params.get('success') === "") {
         const el = document.getElementById("알림창");
         el.className = "alert alert-success";
         el.textContent = "회원가입이 완료되었습니다. 로그인해주세요.";
